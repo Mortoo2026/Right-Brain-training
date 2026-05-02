@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠 Right Brain Block — Micah & Remi</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0D0B1E;
+  --card: #16132E;
+  --surface: #1E1A38;
+  --gold: #FFD93D;
+  --coral: #FF6B6B;
+  --mint: #4DFFC3;
+  --sky: #7EB8FF;
+  --purple: #C77DFF;
+  --orange: #FF9F1C;
+  --text: #F0EEFF;
+  --muted: #8B85AA;
+  --radius: 24px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* ---- STARFIELD ---- */
+.stars {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 30%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 15% 50%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(2px 2px at 78% 15%, rgba(255,255,255,0.2) 0%, transparent 100%);
+}
+
+/* ---- LAYOUT ---- */
+#app {
+  position: relative; z-index: 10;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+  min-height: 100vh;
+}
+
+/* ---- WELCOME SCREEN ---- */
+#screen-welcome {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding-top: 40px;
+}
+.brain-icon {
+  font-size: 5rem;
+  animation: pulse 2.5s ease-in-out infinite;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 20px rgba(199,125,255,0.6));
+}
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+
+.welcome-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--gold), var(--coral), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.welcome-sub {
+  color: var(--muted); font-size: 1.05rem; font-weight: 600; margin-bottom: 6px;
+}
+.time-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50px;
+  padding: 8px 20px;
+  font-size: 0.9rem; font-weight: 700; color: var(--gold);
+  margin: 10px 0 28px;
+}
+
+.who-buttons {
+  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.who-btn {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.15rem; font-weight: 700;
+  padding: 14px 30px;
+  border: none; border-radius: 50px; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.3);
+  letter-spacing: 0.3px;
+}
+.who-btn:hover { transform: translateY(-3px); box-shadow: 0 9px 0 rgba(0,0,0,0.3); }
+.who-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+.btn-micah { background: linear-gradient(135deg, var(--sky), #5B9FFF); color: white; }
+.btn-remi  { background: linear-gradient(135deg, var(--coral), #FF8C8C); color: white; }
+.btn-both  { background: linear-gradient(135deg, var(--gold), var(--orange)); color: #1a1200; }
+
+.activity-preview {
+  display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 4px;
+}
+.preview-item {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 14px 18px;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.preview-icon { font-size: 1.8rem; flex-shrink: 0; }
+.preview-info { text-align: left; }
+.preview-name { font-weight: 800; font-size: 1rem; }
+.preview-desc { color: var(--muted); font-size: 0.85rem; font-weight: 600; margin-top: 2px; }
+.preview-time {
+  margin-left: auto; flex-shrink: 0;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50px; padding: 4px 12px;
+  font-size: 0.8rem; font-weight: 700; color: var(--muted);
+}
+
+/* ---- ACTIVITY SCREEN ---- */
+#screen-activity { display: none; }
+
+.progress-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+}
+.progress-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid rgba(255,255,255,0.15);
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+.progress-dot.done { background: var(--mint); border-color: var(--mint); box-shadow: 0 0 10px rgba(77,255,195,0.4); }
+.progress-dot.active { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 14px rgba(255,217,61,0.5); transform: scale(1.3); }
+.progress-line { flex: 1; height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; }
+.progress-line.done { background: var(--mint); }
+
+.activity-header {
+  text-align: center; margin-bottom: 20px;
+}
+.activity-number {
+  display: inline-block;
+  font-size: 0.8rem; font-weight: 800; letter-spacing: 2px;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 8px;
+}
+.activity-name {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(1.8rem, 6vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+/* ---- TIMER RING ---- */
+.timer-wrap {
+  position: relative; width: 160px; height: 160px;
+  margin: 0 auto 22px;
+}
+.timer-svg { transform: rotate(-90deg); }
+.timer-track { fill: none; stroke: var(--surface); stroke-width: 10; }
+.timer-arc   { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.timer-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.timer-seconds {
+  font-family: 'Baloo 2', cursive;
+  font-size: 3rem; font-weight: 800; line-height: 1;
+}
+.timer-label {
+  font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* ---- CONTENT CARD ---- */
+.content-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  margin-bottom: 18px;
+  min-height: 200px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+/* SPEED FLASHCARDS */
+.flashcard {
+  width: 100%; max-width: 360px;
+  aspect-ratio: 4/3;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  cursor: pointer;
+  transition: transform 0.18s;
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+}
+.flashcard:hover { transform: scale(1.02); }
+.flashcard:active { transform: scale(0.98); }
+.fc-photo {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 20px;
+  transition: opacity 0.15s;
+}
+.fc-photo.loading { opacity: 0; }
+.fc-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.0) 55%);
+  border-radius: 20px;
+  pointer-events: none;
+}
+.fc-tap-hint {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  font-size: 0.65rem; letter-spacing: 2px; font-weight: 800;
+  color: rgba(255,255,255,0.5); text-transform: uppercase;
+  background: rgba(0,0,0,0.3); border-radius: 50px; padding: 3px 12px;
+  pointer-events: none;
+}
+.fc-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 14px 16px 16px;
+  pointer-events: none;
+}
+.fc-word-en {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  font-weight: 800; color: #fff;
+  line-height: 1; text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+.fc-word-lang {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  font-weight: 700; color: rgba(255,255,255,0.75);
+  margin-top: 3px; text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.fc-lang-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border-radius: 50px; padding: 1px 8px;
+  font-size: 0.75rem; font-weight: 800;
+  margin-right: 4px; letter-spacing: 0.5px;
+}
+.card-count {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 50px; padding: 3px 10px;
+  font-size: 0.75rem; font-weight: 800; color: rgba(255,255,255,0.8);
+}
+.fc-loading-spinner {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 2rem;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.flash-animate { animation: flashIn 0.22s ease; }
+@keyframes flashIn { from{opacity:0;transform:scale(0.94);} to{opacity:1;transform:scale(1);} }
+
+/* MEMORY STORY CHAIN */
+.story-objects {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 18px;
+}
+.story-obj {
+  background: var(--surface);
+  border-radius: 14px; padding: 10px 16px;
+  font-size: 1.5rem; border: 1px solid rgba(255,255,255,0.1);
+  animation: popIn 0.3s ease backwards;
+}
+@keyframes popIn { from{transform:scale(0);opacity:0;} to{transform:scale(1);opacity:1;} }
+.story-prompt {
+  font-size: 1rem; font-weight: 700; color: var(--muted);
+  line-height: 1.6;
+}
+.story-prompt strong { color: var(--gold); }
+.recall-btn {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.05rem; font-weight: 700;
+  padding: 12px 28px; border: none; border-radius: 50px;
+  background: linear-gradient(135deg, var(--purple), #A06FFF);
+  color: white; cursor: pointer; margin-top: 14px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+  transition: transform 0.15s;
+}
+.recall-btn:hover { transform: translateY(-2px); }
+
+/* VISUALISATION */
+.vis-scene {
+  font-size: clamp(3rem, 14vw, 5rem);
+  margin-bottom: 12px;
+  animation: floatScene 3s ease-in-out infinite;
+}
+@keyframes floatScene { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+.vis-instruction {
+  font-size: 1.1rem; font-weight: 700; line-height: 1.7;
+  max-width: 340px;
+}
+.vis-instruction em { color: var(--mint); font-style: normal; }
+.vis-next-btn {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1rem; font-weight: 700;
+  padding: 11px 26px; border: none; border-radius: 50px;
+  background: var(--surface);
+  color: var(--mint); cursor: pointer; margin-top: 16px;
+  border: 1px solid var(--mint);
+  transition: background 0.2s;
+}
+.vis-next-btn:hover { background: rgba(77,255,195,0.1); }
+
+/* ---- BOTTOM CONTROLS ---- */
+.controls {
+  display: flex; gap: 12px; justify-content: center; margin-top: 4px;
+}
+.ctrl-btn {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1rem; font-weight: 700;
+  padding: 13px 28px; border: none; border-radius: 50px; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.3);
+  letter-spacing: 0.3px;
+}
+.ctrl-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 0 rgba(0,0,0,0.3); }
+.ctrl-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+.btn-pause  { background: var(--surface); color: var(--text); border: 1px solid rgba(255,255,255,0.1); }
+.btn-skip   { background: rgba(255,255,255,0.08); color: var(--muted); border: 1px solid rgba(255,255,255,0.08); font-size: 0.85rem; }
+.btn-primary { background: linear-gradient(135deg, var(--gold), var(--orange)); color: #1a1200; }
+
+/* ---- COMPLETE SCREEN ---- */
+#screen-complete {
+  display: none; text-align: center; padding-top: 50px;
+}
+.trophy { font-size: 6rem; animation: bounce 0.6s ease; }
+@keyframes bounce { 0%{transform:scale(0) rotate(-20deg);} 80%{transform:scale(1.1) rotate(5deg);} 100%{transform:scale(1) rotate(0);} }
+.complete-title {
+  font-family: 'Baloo 2', cursive; font-size: 2.4rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--gold), var(--mint));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin: 16px 0 8px;
+}
+.complete-msg { color: var(--muted); font-size: 1rem; font-weight: 600; line-height: 1.6; margin-bottom: 28px; }
+.stars-row { font-size: 2.2rem; letter-spacing: 8px; margin-bottom: 24px; }
+.complete-summary {
+  display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; text-align: left;
+}
+.summary-row {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--surface); border-radius: 14px; padding: 12px 18px;
+  border: 1px solid rgba(77,255,195,0.2);
+}
+.summary-icon { font-size: 1.5rem; }
+.summary-text { font-weight: 700; font-size: 0.95rem; }
+.summary-tick { margin-left: auto; color: var(--mint); font-size: 1.3rem; }
+.btn-restart {
+  font-family: 'Baloo 2', cursive; font-size: 1.1rem; font-weight: 700;
+  padding: 15px 40px; border: none; border-radius: 50px; cursor: pointer;
+  background: linear-gradient(135deg, var(--purple), #A06FFF);
+  color: white; box-shadow: 0 6px 0 rgba(0,0,0,0.3);
+  transition: transform 0.15s;
+}
+.btn-restart:hover { transform: translateY(-3px); }
+
+/* ---- STREAK BADGE ---- */
+.streak-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, #FF6B6B22, #FF9F1C22);
+  border: 1px solid rgba(255,159,28,0.3);
+  border-radius: 50px; padding: 6px 16px;
+  font-size: 0.85rem; font-weight: 800; color: var(--orange);
+  margin-top: 10px;
+}
+
+/* ---- PAUSED OVERLAY ---- */
+#pause-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(13,11,30,0.92);
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+  text-align: center;
+}
+#pause-overlay.show { display: flex; }
+.pause-icon { font-size: 4rem; }
+.pause-text { font-family: 'Baloo 2', cursive; font-size: 1.8rem; font-weight: 800; color: var(--gold); }
+.pause-sub  { color: var(--muted); font-weight: 600; }
+
+/* ---- CONFETTI ---- */
+.confetti-piece {
+  position: fixed; width: 10px; height: 10px; border-radius: 3px;
+  pointer-events: none; z-index: 9999;
+  animation: cFall 1.8s ease-in forwards;
+}
+@keyframes cFall { 0%{opacity:1;transform:translateY(-20px) rotate(0deg);} 100%{opacity:0;transform:translateY(100vh) rotate(720deg);} }
+
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<div id="app">
+
+  <!-- ========= WELCOME ========= -->
+  <div id="screen-welcome">
+    <div class="brain-icon">🧠</div>
+    <div class="welcome-title">Right Brain<br>Block</div>
+    <div class="welcome-sub">Monday – Friday</div>
+    <div class="time-badge">⏰ 7:30 am — 15 minutes</div>
+
+    <div class="who-buttons">
+      <button class="who-btn btn-micah" onclick="startSession('Micah')">👦🏿 Micah</button>
+      <button class="who-btn btn-remi"  onclick="startSession('Remi')">🧒🏿 Remi</button>
+      <button class="who-btn btn-both"  onclick="startSession('Both')">👦🏿🧒🏿 Both</button>
+    </div>
+
+    <div class="activity-preview">
+      <div class="preview-item">
+        <div class="preview-icon">⚡</div>
+        <div class="preview-info">
+          <div class="preview-name">Speed Flashcards</div>
+          <div class="preview-desc">Tap through picture cards super fast!</div>
+        </div>
+        <div class="preview-time">5 min</div>
+      </div>
+      <div class="preview-item">
+        <div class="preview-icon">🔗</div>
+        <div class="preview-info">
+          <div class="preview-name">Memory Story Chain</div>
+          <div class="preview-desc">Build a silly story to remember objects</div>
+        </div>
+        <div class="preview-time">5 min</div>
+      </div>
+      <div class="preview-item">
+        <div class="preview-icon">👁️</div>
+        <div class="preview-info">
+          <div class="preview-name">Visualisation</div>
+          <div class="preview-desc">Close your eyes and picture the scene</div>
+        </div>
+        <div class="preview-time">5 min</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= ACTIVITY ========= -->
+  <div id="screen-activity">
+
+    <div class="progress-row" id="progress-row">
+      <div class="progress-dot" id="dot-0"></div>
+      <div class="progress-line" id="line-0"></div>
+      <div class="progress-dot" id="dot-1"></div>
+      <div class="progress-line" id="line-1"></div>
+      <div class="progress-dot" id="dot-2"></div>
+    </div>
+
+    <div class="activity-header">
+      <div class="activity-number" id="act-number"></div>
+      <div class="activity-name" id="act-name"></div>
+    </div>
+
+    <div class="timer-wrap">
+      <svg class="timer-svg" width="160" height="160" viewBox="0 0 160 160">
+        <circle class="timer-track" cx="80" cy="80" r="70"/>
+        <circle class="timer-arc" id="timer-arc" cx="80" cy="80" r="70"/>
+      </svg>
+      <div class="timer-center">
+        <div class="timer-seconds" id="timer-display">5:00</div>
+        <div class="timer-label">remaining</div>
+      </div>
+    </div>
+
+    <div class="content-card" id="content-card"></div>
+
+    <div class="controls">
+      <button class="ctrl-btn btn-pause" id="btn-pause" onclick="togglePause()">⏸ Pause</button>
+      <button class="ctrl-btn btn-skip"  onclick="skipActivity()">Skip ›</button>
+    </div>
+
+  </div>
+
+  <!-- ========= COMPLETE ========= -->
+  <div id="screen-complete">
+    <div class="trophy">🏆</div>
+    <div class="complete-title">Brain Trained!</div>
+    <div class="complete-msg" id="complete-msg"></div>
+    <div class="stars-row">⭐ ⭐ ⭐</div>
+    <div class="complete-summary">
+      <div class="summary-row"><div class="summary-icon">⚡</div><div class="summary-text">Speed Flashcards — done!</div><div class="summary-tick">✅</div></div>
+      <div class="summary-row"><div class="summary-icon">🔗</div><div class="summary-text">Memory Story Chain — done!</div><div class="summary-tick">✅</div></div>
+      <div class="summary-row"><div class="summary-icon">👁️</div><div class="summary-text">Visualisation — done!</div><div class="summary-tick">✅</div></div>
+    </div>
+    <div class="streak-badge" id="streak-badge">🔥 <span id="streak-text">1 day streak!</span></div>
+    <br><br>
+    <button class="btn-restart" onclick="goHome()">🏠 Home</button>
+  </div>
+
+</div>
+
+<!-- Pause overlay -->
+<div id="pause-overlay">
+  <div class="pause-icon">⏸️</div>
+  <div class="pause-text">Paused</div>
+  <div class="pause-sub">Tap the button below to continue</div>
+  <br>
+  <button class="ctrl-btn btn-primary" onclick="togglePause()" style="font-size:1.05rem;padding:14px 36px;">▶ Continue</button>
+</div>
+
+<script>
+// ============================================================
+//  DATA
+// ============================================================
+
+// Each card: img (Wikimedia Commons), en (English), lang (translated word), langLabel
+// Micah: English + Mandarin  |  Remi: English + Spanish  |  Both: mix
+const FLASHCARD_SETS = {
+  Micah: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/480px-Lion_waiting_in_Namibia.jpg',en:'Lion',lang:'狮子 (Shīzi)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/African_Bush_Elephant.jpg/480px-African_Bush_Elephant.jpg',en:'Elephant',lang:'大象 (Dàxiàng)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/White_shark.jpg/480px-White_shark.jpg',en:'Shark',lang:'鲨鱼 (Shāyú)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Bengal_tiger_%28Panthera_tigris_tigris%29_female_3_crop.jpg/480px-Bengal_tiger_%28Panthera_tigris_tigris%29_female_3_crop.jpg',en:'Tiger',lang:'老虎 (Lǎohǔ)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/480px-Camponotus_flavomarginatus_ant.jpg',en:'Cheetah',lang:'猎豹 (Lièbào)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Aptenodytes_forsteri_-Snow_Hill_Island%2C_Antarctica_-adults_and_juvenile-8.jpg/480px-Aptenodytes_forsteri_-Snow_Hill_Island%2C_Antarctica_-adults_and_juvenile-8.jpg',en:'Penguin',lang:'企鹅 (Qǐé)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Crocodylus_porosus_camouflage.jpg/480px-Crocodylus_porosus_camouflage.jpg',en:'Crocodile',lang:'鳄鱼 (Èyú)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cute_dog.jpg/480px-Cute_dog.jpg',en:'Dog',lang:'狗 (Gǒu)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/480px-Cat_November_2010-1a.jpg',en:'Cat',lang:'猫 (Māo)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Collage_of_Nine_Dogs.jpg/480px-Collage_of_Nine_Dogs.jpg',en:'Bear',lang:'熊 (Xióng)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Gorille_des_plaines_occidentales_%C3%A0_l%27Espace_Zoologique.jpg/480px-Gorille_des_plaines_occidentales_%C3%A0_l%27Espace_Zoologique.jpg',en:'Gorilla',lang:'大猩猩 (Dà xīngxing)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Collage_of_Nine_Dogs.jpg/480px-Collage_of_Nine_Dogs.jpg',en:'Eagle',lang:'老鹰 (Lǎoyīng)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Crab_on_the_beach.jpg/480px-Crab_on_the_beach.jpg',en:'Crab',lang:'螃蟹 (Pángxiè)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg/480px-Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg',en:'Mountain',lang:'山 (Shān)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/24701-nature-natural-beauty.jpg/480px-24701-nature-natural-beauty.jpg',en:'Butterfly',lang:'蝴蝶 (Húdié)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Kalamkari_art_print_of_a_dolphin.jpg/480px-Kalamkari_art_print_of_a_dolphin.jpg',en:'Dolphin',lang:'海豚 (Hǎitún)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg/480px-Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg',en:'Octopus',lang:'章鱼 (Zhāngyú)',langLabel:'🇨🇳 Mandarin'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Giraffe_Mikumi_National_Park.jpg/480px-Giraffe_Mikumi_National_Park.jpg',en:'Giraffe',lang:'长颈鹿 (Chángjǐnglù)',langLabel:'🇨🇳 Mandarin'},
+  ],
+  Remi: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/480px-Lion_waiting_in_Namibia.jpg',en:'Lion',lang:'el León',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/African_Bush_Elephant.jpg/480px-African_Bush_Elephant.jpg',en:'Elephant',lang:'el Elefante',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/White_shark.jpg/480px-White_shark.jpg',en:'Shark',lang:'el Tiburón',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Bengal_tiger_%28Panthera_tigris_tigris%29_female_3_crop.jpg/480px-Bengal_tiger_%28Panthera_tigris_tigris%29_female_3_crop.jpg',en:'Tiger',lang:'el Tigre',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Aptenodytes_forsteri_-Snow_Hill_Island%2C_Antarctica_-adults_and_juvenile-8.jpg/480px-Aptenodytes_forsteri_-Snow_Hill_Island%2C_Antarctica_-adults_and_juvenile-8.jpg',en:'Penguin',lang:'el Pingüino',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Crocodylus_porosus_camouflage.jpg/480px-Crocodylus_porosus_camouflage.jpg',en:'Crocodile',lang:'el Cocodrilo',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cute_dog.jpg/480px-Cute_dog.jpg',en:'Dog',lang:'el Perro',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/480px-Cat_November_2010-1a.jpg',en:'Cat',lang:'el Gato',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Gorille_des_plaines_occidentales_%C3%A0_l%27Espace_Zoologique.jpg/480px-Gorille_des_plaines_occidentales_%C3%A0_l%27Espace_Zoologique.jpg',en:'Gorilla',lang:'el Gorila',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Giraffe_Mikumi_National_Park.jpg/480px-Giraffe_Mikumi_National_Park.jpg',en:'Giraffe',lang:'la Jirafa',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/24701-nature-natural-beauty.jpg/480px-24701-nature-natural-beauty.jpg',en:'Butterfly',lang:'la Mariposa',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg/480px-Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg',en:'Mountain',lang:'la Montaña',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Crab_on_the_beach.jpg/480px-Crab_on_the_beach.jpg',en:'Crab',lang:'el Cangrejo',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Collage_of_Nine_Dogs.jpg/480px-Collage_of_Nine_Dogs.jpg',en:'Bear',lang:'el Oso',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg/480px-Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg',en:'Fox',lang:'el Zorro',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Kalamkari_art_print_of_a_dolphin.jpg/480px-Kalamkari_art_print_of_a_dolphin.jpg',en:'Dolphin',lang:'el Delfín',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Collage_of_Nine_Dogs.jpg/480px-Collage_of_Nine_Dogs.jpg',en:'Eagle',lang:'el Águila',langLabel:'🇪🇸 Español'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/480px-Camponotus_flavomarginatus_ant.jpg',en:'Cheetah',lang:'el Guepardo',langLabel:'🇪🇸 Español'},
+  ],
+  Both: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/480px-Lion_waiting_in_Namibia.jpg',en:'Lion',lang:'狮子 / León',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/African_Bush_Elephant.jpg/480px-African_Bush_Elephant.jpg',en:'Elephant',lang:'大象 / Elefante',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/White_shark.jpg/480px-White_shark.jpg',en:'Shark',lang:'鲨鱼 / Tiburón',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Bengal_tiger_%28Panthera_tigris_tigris%29_female_3_crop.jpg/480px-Bengal_tiger_%28Panthera_tigris_tigris%29_female_3_crop.jpg',en:'Tiger',lang:'老虎 / Tigre',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Aptenodytes_forsteri_-Snow_Hill_Island%2C_Antarctica_-adults_and_juvenile-8.jpg/480px-Aptenodytes_forsteri_-Snow_Hill_Island%2C_Antarctica_-adults_and_juvenile-8.jpg',en:'Penguin',lang:'企鹅 / Pingüino',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Crocodylus_porosus_camouflage.jpg/480px-Crocodylus_porosus_camouflage.jpg',en:'Crocodile',lang:'鳄鱼 / Cocodrilo',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cute_dog.jpg/480px-Cute_dog.jpg',en:'Dog',lang:'狗 / Perro',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/480px-Cat_November_2010-1a.jpg',en:'Cat',lang:'猫 / Gato',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Gorille_des_plaines_occidentales_%C3%A0_l%27Espace_Zoologique.jpg/480px-Gorille_des_plaines_occidentales_%C3%A0_l%27Espace_Zoologique.jpg',en:'Gorilla',lang:'大猩猩 / Gorila',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Giraffe_Mikumi_National_Park.jpg/480px-Giraffe_Mikumi_National_Park.jpg',en:'Giraffe',lang:'长颈鹿 / Jirafa',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/24701-nature-natural-beauty.jpg/480px-24701-nature-natural-beauty.jpg',en:'Butterfly',lang:'蝴蝶 / Mariposa',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Kalamkari_art_print_of_a_dolphin.jpg/480px-Kalamkari_art_print_of_a_dolphin.jpg',en:'Dolphin',lang:'海豚 / Delfín',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Crab_on_the_beach.jpg/480px-Crab_on_the_beach.jpg',en:'Crab',lang:'螃蟹 / Cangrejo',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/480px-Camponotus_flavomarginatus_ant.jpg',en:'Cheetah',lang:'猎豹 / Guepardo',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg/480px-Everest_North_Face_toward_Base_Camp_Tibet_Luca_Galuzzi_2006.jpg',en:'Mountain',lang:'山 / Montaña',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Collage_of_Nine_Dogs.jpg/480px-Collage_of_Nine_Dogs.jpg',en:'Bear',lang:'熊 / Oso',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Collage_of_Nine_Dogs.jpg/480px-Collage_of_Nine_Dogs.jpg',en:'Eagle',lang:'老鹰 / Águila',langLabel:'🇨🇳🇪🇸'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg/480px-Orange_tabby_cat_sitting_on_fallen_leaves-Hisashi-01A.jpg',en:'Fox',lang:'狐狸 / Zorro',langLabel:'🇨🇳🇪🇸'},
+  ]
+};
+
+const STORY_OBJECT_POOLS = [
+  ['🍌','🚀','🐘','👠','🌵','🎩','🐙','🎺'],
+  ['🥐','🦒','🎸','🪑','🌋','🐠','🕰️','🎪'],
+  ['🍕','🦋','🧲','🛸','🌺','🐻','🎭','⚡'],
+  ['🍦','🦅','🎈','🏔️','🐝','🎯','🌊','🧸'],
+  ['🥝','🐉','🪄','🎻','🌙','🦊','🏰','🌟'],
+];
+
+const VIS_SEQUENCES = [
+  [
+    {icon:'🍎', text:'Close your eyes... <em>picture a big red apple</em>. Make it huge — bigger than your head!'},
+    {icon:'🍎🔵', text:'Now… <em>paint it bright blue</em>. The whole apple — electric blue.'},
+    {icon:'🚀',  text:'Whoosh! <em>It turns into a rocket</em> and shoots up into the sky!'},
+    {icon:'✨',   text:'Watch it burst into <em>a million sparkling stars</em>. Hold that picture…'},
+  ],
+  [
+    {icon:'🌊', text:'Imagine you\'re standing at the edge of a <em>giant ocean</em>. Feel the warm sand.'},
+    {icon:'🐋', text:'A <em>massive whale leaps out</em> of the water right in front of you!'},
+    {icon:'🌈', text:'It lands back in and creates a <em>rainbow made of water drops</em>.'},
+    {icon:'🏠',  text:'The rainbow stretches all the way to <em>your house</em>. You walk home on it!'},
+  ],
+  [
+    {icon:'🌳', text:'Picture a <em>giant tree</em> in a field. Count the leaves… there are too many!'},
+    {icon:'🦜', text:'Suddenly every leaf <em>turns into a parrot</em> and they all fly off squawking!'},
+    {icon:'🌸', text:'Where the leaves were, <em>pink flowers bloom instantly</em>.'},
+    {icon:'🏡', text:'A tiny door appears in the trunk. <em>Who lives inside?</em> You decide.'},
+  ],
+  [
+    {icon:'🌙', text:'It\'s night time. You\'re floating in <em>space</em>. The stars are all around you.'},
+    {icon:'🪐', text:'You reach out and <em>touch Saturn\'s rings</em>. They feel like soft sand.'},
+    {icon:'🚀', text:'Your rocket is parked nearby. <em>You jump in</em> and fire up the engines.'},
+    {icon:'🌍', text:'You zoom back and see <em>Earth below you</em> — tiny and beautiful. Wave at it!'},
+  ],
+];
+
+// ============================================================
+//  STATE
+// ============================================================
+let sessionName = '';
+let currentActivity = 0;      // 0,1,2
+let timerInterval = null;
+let secondsLeft = 300;
+let isPaused = false;
+let flashCards = [];
+let flashIndex = 0;
+let storyObjects = [];
+let visStep = 0;
+let visSeq = null;
+let streak = parseInt(localStorage.getItem('rbStreak') || '0');
+let lastDate = localStorage.getItem('rbLastDate') || '';
+
+const ACTIVITIES = [
+  { name: '⚡ Speed Flashcards', colour: '#FFD93D', arcColour: '#FFD93D' },
+  { name: '🔗 Memory Story Chain', colour: '#C77DFF', arcColour: '#C77DFF' },
+  { name: '👁️ Visualisation', colour: '#4DFFC3', arcColour: '#4DFFC3' },
+];
+const TOTAL_SECONDS = 300;
+const CIRCUMFERENCE = 2 * Math.PI * 70; // r=70
+
+// ============================================================
+//  WELCOME → START
+// ============================================================
+function startSession(name) {
+  sessionName = name;
+  currentActivity = 0;
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-activity').style.display = 'block';
+  loadActivity(0);
+}
+
+// ============================================================
+//  PROGRESS DOTS
+// ============================================================
+function updateProgress(idx) {
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById('dot-'+i);
+    dot.className = 'progress-dot';
+    if (i < idx) dot.classList.add('done');
+    else if (i === idx) dot.classList.add('active');
+  }
+  for (let i = 0; i < 2; i++) {
+    const line = document.getElementById('line-'+i);
+    line.className = 'progress-line';
+    if (i < idx) line.classList.add('done');
+  }
+}
+
+// ============================================================
+//  TIMER
+// ============================================================
+function startTimer() {
+  secondsLeft = TOTAL_SECONDS;
+  isPaused = false;
+  updateTimerDisplay();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (isPaused) return;
+    secondsLeft--;
+    updateTimerDisplay();
+    if (secondsLeft <= 0) {
+      clearInterval(timerInterval);
+      advanceActivity();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(secondsLeft / 60);
+  const s = secondsLeft % 60;
+  document.getElementById('timer-display').textContent = m + ':' + String(s).padStart(2,'0');
+  const arc = document.getElementById('timer-arc');
+  const pct = secondsLeft / TOTAL_SECONDS;
+  arc.setAttribute('stroke-dasharray', CIRCUMFERENCE);
+  arc.setAttribute('stroke-dashoffset', CIRCUMFERENCE * (1 - pct));
+  const col = ACTIVITIES[currentActivity].arcColour;
+  arc.setAttribute('stroke', col);
+  document.getElementById('timer-display').style.color = col;
+}
+
+function togglePause() {
+  isPaused = !isPaused;
+  document.getElementById('btn-pause').textContent = isPaused ? '▶ Resume' : '⏸ Pause';
+  const overlay = document.getElementById('pause-overlay');
+  overlay.classList.toggle('show', isPaused);
+}
+
+function skipActivity() {
+  if (confirm('Skip to next activity?')) advanceActivity();
+}
+
+function advanceActivity() {
+  clearInterval(timerInterval);
+  confettiBurst();
+  currentActivity++;
+  if (currentActivity >= 3) {
+    showComplete();
+  } else {
+    setTimeout(() => loadActivity(currentActivity), 600);
+  }
+}
+
+// ============================================================
+//  LOAD ACTIVITY
+// ============================================================
+function loadActivity(idx) {
+  updateProgress(idx);
+  const act = ACTIVITIES[idx];
+  document.getElementById('act-number').textContent = 'ACTIVITY ' + (idx+1) + ' OF 3';
+  document.getElementById('act-name').textContent = act.name;
+  startTimer();
+
+  const card = document.getElementById('content-card');
+  card.innerHTML = '';
+
+  if (idx === 0) buildFlashcards(card);
+  else if (idx === 1) buildStoryChain(card);
+  else buildVisualisation(card);
+}
+
+// ============================================================
+//  ACTIVITY 1: SPEED FLASHCARDS
+// ============================================================
+function buildFlashcards(card) {
+  const set = [...(FLASHCARD_SETS[sessionName] || FLASHCARD_SETS.Both)].sort(() => Math.random()-0.5);
+  flashCards = set;
+  flashIndex = 0;
+
+  const fc = document.createElement('div');
+  fc.className = 'flashcard';
+  fc.id = 'fc-main';
+  fc.onclick = () => nextFlashcard();
+
+  // Spinner shown while first image loads
+  const spinner = document.createElement('div');
+  spinner.className = 'fc-loading-spinner';
+  spinner.id = 'fc-spinner';
+  spinner.textContent = '◌';
+  fc.appendChild(spinner);
+
+  const img = document.createElement('img');
+  img.className = 'fc-photo loading';
+  img.id = 'fc-photo';
+  img.src = flashCards[0].img;
+  img.alt = flashCards[0].en;
+  img.onload = () => {
+    img.classList.remove('loading');
+    const sp = document.getElementById('fc-spinner');
+    if (sp) sp.style.display = 'none';
+  };
+  fc.appendChild(img);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'fc-overlay';
+  fc.appendChild(overlay);
+
+  const tapHint = document.createElement('div');
+  tapHint.className = 'fc-tap-hint';
+  tapHint.textContent = 'TAP FOR NEXT →';
+  fc.appendChild(tapHint);
+
+  const cc = document.createElement('div');
+  cc.className = 'card-count';
+  cc.id = 'fc-count';
+  cc.textContent = '1 / ' + flashCards.length;
+  fc.appendChild(cc);
+
+  const label = document.createElement('div');
+  label.className = 'fc-label';
+  label.id = 'fc-label';
+
+  const wordEn = document.createElement('div');
+  wordEn.className = 'fc-word-en';
+  wordEn.id = 'fc-word-en';
+  wordEn.textContent = flashCards[0].en;
+
+  const wordLang = document.createElement('div');
+  wordLang.className = 'fc-word-lang';
+  wordLang.id = 'fc-word-lang';
+  wordLang.innerHTML = `<span class="fc-lang-badge">${flashCards[0].langLabel}</span>${flashCards[0].lang}`;
+
+  label.appendChild(wordEn);
+  label.appendChild(wordLang);
+  fc.appendChild(label);
+  card.appendChild(fc);
+
+  // Preload next card
+  preloadNext(1);
+
+  const hint = document.createElement('div');
+  hint.style.cssText = 'margin-top:12px;color:var(--muted);font-size:0.9rem;font-weight:700;';
+  hint.textContent = 'Say the word out loud, then tap! ⚡';
+  card.appendChild(hint);
+}
+
+function preloadNext(idx) {
+  if (idx < flashCards.length) {
+    const pre = new Image();
+    pre.src = flashCards[idx].img;
+  }
+}
+
+function nextFlashcard() {
+  flashIndex = (flashIndex + 1) % flashCards.length;
+  const fc = document.getElementById('fc-main');
+  fc.classList.remove('flash-animate');
+  void fc.offsetWidth;
+  fc.classList.add('flash-animate');
+
+  const img = document.getElementById('fc-photo');
+  img.classList.add('loading');
+  img.src = flashCards[flashIndex].img;
+  img.onload = () => img.classList.remove('loading');
+
+  document.getElementById('fc-word-en').textContent = flashCards[flashIndex].en;
+  document.getElementById('fc-word-lang').innerHTML =
+    `<span class="fc-lang-badge">${flashCards[flashIndex].langLabel}</span>${flashCards[flashIndex].lang}`;
+  document.getElementById('fc-count').textContent = (flashIndex+1) + ' / ' + flashCards.length;
+
+  preloadNext(flashIndex + 1);
+}
+
+// ============================================================
+//  ACTIVITY 2: MEMORY STORY CHAIN
+// ============================================================
+function buildStoryChain(card) {
+  const pool = STORY_OBJECT_POOLS[Math.floor(Math.random() * STORY_OBJECT_POOLS.length)];
+  storyObjects = pool;
+
+  card.innerHTML = '';
+
+  const title = document.createElement('div');
+  title.style.cssText = 'font-family:"Baloo 2",cursive;font-size:1.1rem;font-weight:800;color:var(--purple);margin-bottom:14px;';
+  title.textContent = 'Remember these 8 things in order:';
+  card.appendChild(title);
+
+  const objRow = document.createElement('div');
+  objRow.className = 'story-objects';
+  pool.forEach((obj, i) => {
+    const el = document.createElement('div');
+    el.className = 'story-obj';
+    el.textContent = obj;
+    el.style.animationDelay = (i * 0.1) + 's';
+    objRow.appendChild(el);
+  });
+  card.appendChild(objRow);
+
+  const prompt = document.createElement('div');
+  prompt.className = 'story-prompt';
+  prompt.innerHTML = 'Now build ONE <strong>silly story</strong> using all 8 things — the sillier the better! Connect them together in order. Make it <strong>BIG, funny and weird!</strong> 🤪';
+  card.appendChild(prompt);
+
+  const recallBtn = document.createElement('button');
+  recallBtn.className = 'recall-btn';
+  recallBtn.textContent = '🧠 Test Your Memory!';
+  recallBtn.onclick = () => startRecall(card, pool);
+  card.appendChild(recallBtn);
+}
+
+function startRecall(card, pool) {
+  card.innerHTML = '';
+  const title = document.createElement('div');
+  title.style.cssText = 'font-family:"Baloo 2",cursive;font-size:1.1rem;font-weight:800;color:var(--purple);margin-bottom:18px;';
+  title.textContent = 'Can you remember all 8? Say them out loud! 👂';
+  card.appendChild(title);
+
+  const dots = document.createElement('div');
+  dots.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;';
+  pool.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.style.cssText = 'width:40px;height:40px;border-radius:50%;background:var(--surface);border:2px dashed rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;transition:all 0.2s;';
+    d.id = 'recall-dot-'+i;
+    d.onclick = () => revealRecall(pool, i);
+    d.title = 'Tap to reveal';
+    dots.appendChild(d);
+  });
+  card.appendChild(dots);
+
+  const hint = document.createElement('div');
+  hint.style.cssText = 'color:var(--muted);font-size:0.85rem;font-weight:700;';
+  hint.textContent = 'Say each one, then tap to reveal!';
+  card.appendChild(hint);
+}
+
+function revealRecall(pool, i) {
+  const dot = document.getElementById('recall-dot-'+i);
+  if (!dot) return;
+  dot.textContent = pool[i];
+  dot.style.background = 'rgba(199,125,255,0.2)';
+  dot.style.borderColor = 'var(--purple)';
+  dot.style.cursor = 'default';
+}
+
+// ============================================================
+//  ACTIVITY 3: VISUALISATION
+// ============================================================
+function buildVisualisation(card) {
+  visStep = 0;
+  visSeq = VIS_SEQUENCES[Math.floor(Math.random() * VIS_SEQUENCES.length)];
+  renderVisStep(card);
+}
+
+function renderVisStep(card) {
+  card.innerHTML = '';
+  const step = visSeq[visStep];
+
+  const closeEyes = document.createElement('div');
+  closeEyes.style.cssText = 'font-size:0.85rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;';
+  closeEyes.textContent = visStep === 0 ? '👁️ Close your eyes…' : '🌟 Keep imagining…';
+  card.appendChild(closeEyes);
+
+  const scene = document.createElement('div');
+  scene.className = 'vis-scene';
+  scene.textContent = step.icon;
+  card.appendChild(scene);
+
+  const instr = document.createElement('div');
+  instr.className = 'vis-instruction';
+  instr.innerHTML = step.text;
+  card.appendChild(instr);
+
+  if (visStep < visSeq.length - 1) {
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'vis-next-btn';
+    nextBtn.textContent = 'Next Scene →';
+    nextBtn.onclick = () => {
+      visStep++;
+      renderVisStep(document.getElementById('content-card'));
+    };
+    card.appendChild(nextBtn);
+  } else {
+    const doneMsg = document.createElement('div');
+    doneMsg.style.cssText = 'margin-top:14px;font-weight:800;color:var(--mint);font-size:0.95rem;';
+    doneMsg.textContent = '✨ Hold that picture until the timer ends…';
+    card.appendChild(doneMsg);
+  }
+}
+
+// ============================================================
+//  COMPLETE SCREEN
+// ============================================================
+function showComplete() {
+  clearInterval(timerInterval);
+  document.getElementById('screen-activity').style.display = 'none';
+  document.getElementById('screen-complete').style.display = 'block';
+
+  const today = new Date().toDateString();
+  if (lastDate !== today) {
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    if (lastDate === yesterday.toDateString()) streak++;
+    else streak = 1;
+    localStorage.setItem('rbStreak', streak);
+    localStorage.setItem('rbLastDate', today);
+  }
+  document.getElementById('streak-text').textContent = streak + ' day' + (streak !== 1 ? 's' : '') + ' in a row!';
+
+  const names = {Micah:'Micah 👦🏿', Remi:'Remi 🧒🏿', Both:'Micah & Remi 👦🏿🧒🏿'};
+  document.getElementById('complete-msg').innerHTML =
+    'Amazing work, <strong>' + names[sessionName] + '</strong>!<br>Your brain is getting stronger every day. Time for Literacy Tree! 📚';
+
+  confettiBurst(); confettiBurst();
+}
+
+function goHome() {
+  document.getElementById('screen-complete').style.display = 'none';
+  document.getElementById('screen-welcome').style.display = 'flex';
+  clearInterval(timerInterval);
+}
+
+// ============================================================
+//  CONFETTI
+// ============================================================
+function confettiBurst() {
+  const colours = ['#FFD93D','#FF6B6B','#4DFFC3','#7EB8FF','#C77DFF','#FF9F1C'];
+  for (let i = 0; i < 28; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left:${20 + Math.random()*60}%;
+      top:${10 + Math.random()*20}%;
+      background:${colours[Math.floor(Math.random()*colours.length)]};
+      animation-delay:${Math.random()*0.5}s;
+      animation-duration:${1.5+Math.random()*0.7}s;
+      border-radius:${Math.random()>0.5?'50%':'3px'};
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2400);
+  }
+}
+</script>
+</body>
+</html>
